@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" type="text/css" href="styles/bootstrap4/bootstrap.min.css">
+<link href="plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+<link href="plugins/malihu-custom-scrollbar/jquery.mCustomScrollbar.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="plugins/jquery-ui-1.12.1.custom/jquery-ui.css">
+<link rel="stylesheet" type="text/css" href="styles/categories.css">
+<link rel="stylesheet" type="text/css" href="styles/categories_responsive.css">
+</head>
+<body>
+	<div class="products">
+		<div class="container">
+			<div style="height: 20px"></div>
+		</div>
+	</div>
+	<div class="container">
+		<h2>헬스장 목록</h2>
+		<div class="row">
+			<div class="col-md-3" th:each="vo:${list}">
+		    	<div class="thumbnail">
+		      		<a th:href="@{/gym/before_detail(no=${vo.no})}">
+		        		<img th:src="${vo.poster}" alt="Lights" style="width:100%">
+		        		<div class="caption">
+		          			<p th:text="${vo.title}"></p>
+		        		</div>
+		      		</a>
+		    	</div>
+			</div>
+		</div>
+		<div class="text-center">
+			<ul class="pagination">
+				<li th:if="${startPage>1}"><a th:href="@{/gym/main(page=${startPage-1})}">&laquo;</a></li>
+				<li th:class="${curpage==i?'active':''}" th:each="i:${#numbers.sequence(startPage, endPage)}">
+					<a th:href="@{/gym/main(page=${i})}" th:text="${i}"></a>
+				</li> <!-- 1,2,3,4 출력 -->
+				<li th:if="${endPage<totalpage}"><a th:href="@{/gym/main(page=${endPage+1})}">&raquo;</a></li>
+			</ul>
+		</div>
+	</div>
+	<div class="container">
+		<h2>최근 방문 헬스장</h2>
+	    <div class="inline">
+	    	<a th:href="@{/gym/detail(no=${cvo.no})}" th:each="cvo:${cList}">
+	    		<img th:src="${cvo.poster}" style="width: 100px; height: 100px; margin-left: 3px">
+	    	</a>
+	    </div>
+    </div>
+</body>
+</html>

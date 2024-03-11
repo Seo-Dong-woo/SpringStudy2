@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script type="text/javascript" src="http://code.jquery.com/jquery.js"></script>
+<script type="text/javascript">
+	let i=0
+	$(function(){
+		$('.updates').click(function(){
+			$('.ups').hide()
+			$('.updates').val('수정')
+			let no=$(this).attr("alt")
+			if(i===0)
+			{
+				$(this).val("취소")
+				$('#u' + no).show()
+				i=1;
+			}
+			else
+			{
+				$(this).val("수정")
+				$('#u' + no).hide()
+				i=0;
+			}
+		})
+	})
+</script>
+</head>
+<body>
+	<div class="products">
+		<div class="container">
+			<div style="height: 20px"></div>
+		</div>
+	</div>
+	<div class="container">
+		<h2>헬스장 상세보기</h2>
+		<div class="row">
+			<div class="col-sm-8">
+				<table class="table">
+		      		<tr>
+		        		<td width=30% rowspan="4" align="center">
+		          			<img th:src="${vo.poster}" style="width: 300px; height: 200px">
+		        		</td>
+		        		<td colspan="2"><h3 th:text="${vo.title}"></h3></td>
+		      		</tr>
+		     		<tr>
+		        		<td width=15%>주소</td>
+		        		<td width=55% th:text="${vo.address}"></td>
+		      		</tr>
+		      		<tr>
+		        		<td width=15%>이용시간</td>
+		        		<td width=55% th:text="${vo.time}"></td>
+		      		</tr>
+		      		<tr>
+		        		<td width=15%>전화</td>
+		        		<td width=55% th:text="${vo.phone}"></td>
+		      		</tr>
+		    	</table>
+			</div>
+			<div class="col-sm-4">
+				<div id="map" style="width:100%; height:350px;"></div>
+				<table class="table">
+					<tr>
+						<td align="right">
+							<input type="button"  class="btn btn-sm btn-info" value="목록" onclick="javascript:history.back()">
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div style="height: 20px"></div>
+	<div class="container">
+		<h2>댓글 쓰기</h2>
+		<table class="table">
+    		<tr>
+    			<td>
+    				<table class="table" th:each="rvo:${list}">
+    					<tr>
+    						<td align="left" th:text="|◑ ${rvo.name} ( ${rvo.regdate} )|"></td>
+    						<td align="right">
+    							<span th:if="${session.id==rvo.id}" class="inline">
+    								<input type="button" value="수정" class="btn-xs btn-success updates" th:alt="${rvo.rno}">
+    								<a th:href="@{/reply/delete(no=${rvo.no}, rno=${rvo.rno})}" class="btn btn-xs btn-danger">삭제</a>
+    							</span>
+    						</td>
+    					</tr>
+    					<tr>
+    						<td colspan="2">
+    							<pre style="white-space: pre-wrap; background-color: white; border: none" th:text="${rvo.msg}"></pre>
+    						</td>
+    					</tr>
+    					<tr th:id="|u${rvo.rno}|" class="ups" style="display: none">
+    						<td colspan="2">
+    							<form method="post" action="/reply/insert">
+    								<input type="hidden" name="rno" th:value="${rvo.rno}">
+			    					<input type="hidden" name="no" th:value="${vo.no}">
+			    					<textarea rows="5" cols="60" style="float: left" required name="msg" th:text="${rvo.msg}"></textarea>
+			    					<input type="submit" value="댓글수정" style="height: 95px; width: 100px; background-color: green">
+			    				</form>
+    						</td>
+    					</tr>
+    				</table>
+    			</td>
+    		</tr>
+    	</table>
+    	<table class="table" th:if="${session.id!=null}">
+    		<tr>
+    			<td>
+    				<form method="post" action="/reply/insert">
+    					<input type="hidden" name="no" th:value="${vo.no}">
+    					<textarea rows="5" cols="60" style="float: left" required name="msg"></textarea>
+    					<input type="submit" value="댓글쓰기" style="height: 95px; width: 100px; background-color: green">
+    				</form>
+    			</td>
+    		</tr>
+    	</table>
+	</div>
+	<script type="text/javascript" src="http://dapi.kakao.com/v2/maps/sdk.js?appkey=75fbea090d02af5a01e3d114d2612fe5&libraries=services"></script>
+	<script>
+		var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+			mapOption = {
+				center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+				level: 3 // 지도의 확대 레벨
+			};  
+				
+			// 지도를 생성합니다    
+			var map = new kakao.maps.Map(mapContainer, mapOption); 
+				
+			// 주소-좌표 변환 객체를 생성합니다
+			var geocoder = new kakao.maps.services.Geocoder();
+				
+			// 주소로 좌표를 검색합니다
+			geocoder.addressSearch('[[${vo.address}]]', function(result, status) {
+				
+			// 정상적으로 검색이 완료됐으면 
+			if (status === kakao.maps.services.Status.OK) {
+				
+				var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+				
+				// 결과값으로 받은 위치를 마커로 표시합니다
+				var marker = new kakao.maps.Marker({
+					map: map,
+					position: coords
+				});
+				
+				// 인포윈도우로 장소에 대한 설명을 표시합니다
+				var infowindow = new kakao.maps.InfoWindow({
+					content: '<div style="width:150px;text-align:center;padding:6px 0;">[[${vo.title}]]</div>'
+				});
+				infowindow.open(map, marker);
+				
+				// 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+				map.setCenter(coords);
+			} 
+		});    
+	</script>
+</body>
+</html>

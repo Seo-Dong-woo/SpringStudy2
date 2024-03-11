@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://unpkg.com/vue@3"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+	<!-- Header -->
+
+	<header class="header" id="header">
+		<div class="header_inner d-flex flex-row align-items-center justify-content-start">
+			<div class="logo"><a href="/">Wish</a></div>
+			<nav class="main_nav">
+				<ul>
+					<li><a href="/">home</a></li>
+					<li><a href="/gym/main">헬스장</a></li>
+					<li><a href="/gym/find">헬스장 찾기</a></li>
+					<li><a href="/yp/list">요가&필라테스</a></li>
+					<li><a href="/goods/goods_clothes">운동복</a></li>
+					<!-- <li><a href="categories.html">lingerie</a></li> -->
+					<li><a href="/board/list">자유게시판</a></li>
+				</ul>
+			</nav>
+			<div class="header_content ml-auto">
+				<div class="search header_search inline" th:if="${session.id==null}">
+					<i class="fa fa-phone"></i>ID: <input type="text" ref="id" size="15" v-model="id">&nbsp;
+					<i class="fa fa-envelope-o"></i>PW: <input type="password" ref="pwd" size="15" v-model="pwd">
+					<input type="button" value="로그인" @click="login()">
+				</div>
+				<div class="search header_search" th:unless="${session.id==null}">
+					<i class="fa fa-phone"></i><span th:text="${session.name}"></span>&nbsp;
+					<i class="fa fa-envelope-o"></i>로그인 되었습니다
+					<input type="button" value="로그아웃" @click="logout()">
+				</div>
+			<!-- ################################################################ -->
+				<!-- <div class="search header_search">
+					<form action="#">
+						<input type="search" class="search_input" required="required">
+						<button type="submit" id="search_button" class="search_button"><img src="../images/magnifying-glass.svg" alt=""></button>
+					</form>
+				</div>
+				<div class="shopping">
+					Cart
+					<a href="#">
+						<div class="cart">
+							<img src="../images/shopping-bag.svg" alt="">
+							<div class="cart_num_container">
+								<div class="cart_num_inner">
+									<div class="cart_num">1</div>
+								</div>
+							</div>
+						</div>
+					</a>
+					Star
+					<a href="#">
+						<div class="star">
+							<img src="../images/star.svg" alt="">
+							<div class="star_num_container">
+								<div class="star_num_inner">
+									<div class="star_num">0</div>
+								</div>
+							</div>
+						</div>
+					</a>
+					Avatar
+					<a href="#">
+						<div class="avatar">
+							<img src="../images/avatar.svg" alt="">
+						</div>
+					</a>
+				</div> -->
+			<!-- ################################################################ -->
+			</div>
+
+			<div class="burger_container d-flex flex-column align-items-center justify-content-around menu_mm"><div></div><div></div><div></div></div>
+		</div>
+	</header>
+
+	<!-- Menu -->
+
+	<div class="menu d-flex flex-column align-items-end justify-content-start text-right menu_mm trans_400">
+		<div class="menu_close_container"><div class="menu_close"><div></div><div></div></div></div>
+		<div class="logo menu_mm"><a href="#">Wish</a></div>
+		<div class="search">
+			<form action="#">
+				<input type="search" class="search_input menu_mm" required="required">
+				<button type="submit" id="search_button_menu" class="search_button menu_mm"><img class="menu_mm" src="../images/magnifying-glass.svg" alt=""></button>
+			</form>
+		</div>
+		<nav class="menu_nav">
+			<ul class="menu_mm">
+				<li class="menu_mm"><a href="#">home</a></li>
+				<li class="menu_mm"><a href="#">clothes</a></li>
+				<li class="menu_mm"><a href="#">accessories</a></li>
+				<li class="menu_mm"><a href="#">lingerie</a></li>
+				<li class="menu_mm"><a href="#">contact</a></li>
+			</ul>
+		</nav>
+	</div>
+	<script>
+  	// id:[[${id}]]
+  	let logApp=Vue.createApp({
+  		data(){
+  			return{
+  				id:'',
+  				pwd:''
+  			}
+  		},
+  		methods:{
+  			login(){
+  				if(this.id==="")
+  				{
+  					this.$refs.id.focus()
+  					return
+  				}
+  				if(this.pwd==="")
+  				{
+  					this.$refs.pwd.focus()
+  					return
+  				}
+  				axios.post('member/login', null, {
+  					params:{
+  						id:this.id,
+  						pwd:this.pwd
+  					}
+  				}).then(res=>{
+  					if(res.data==='NOID')
+  					{
+  						alert("아이디가 존재하지 않습니다")
+  						this.id=''
+  						this.pwd=''
+  						this.$refs.id.focus()
+  					}
+  					else if(res.data==='NOPWD')
+  					{
+  						alert("비밀번호가 틀립니다")
+  						this.pwd=''
+  						this.$refs.pwd.focus()
+  					}
+  					else
+  					{
+  						location.href="/"
+  					}
+  				})
+  			},
+  			logout(){
+  				axios.get('/member/logout').then(res=>{
+  					if(res.data==='yes')
+  					{
+  						location.href="/"
+  					}
+  					else
+  					{
+  						alert("로그아웃에 실패하셨습니다")
+  					}
+  				})
+  			}
+  		}
+  	}).mount('#header')
+  </script>
+</body>
+</html>

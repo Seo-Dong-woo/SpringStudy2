@@ -12,33 +12,19 @@ import com.sist.web.entity.*;
 
 @RestController
 @CrossOrigin("*")
-public class GoodsRestController {
+public class CampingRestController {
 	@Autowired
-	private Goods1DAO dao;
+	private CampingDAO dao;
 	
-	@Autowired
-	private CampingDAO cDao;
-	
-	@GetMapping("/goods1/main_react")
-	public Map goods1MainData()
-	{
-		Map map=new HashMap();
-		List<Goods1> list=dao.goods1MainData();
-		List<Camping> cList=cDao.campingMainData();
-		map.put("list", list);
-		map.put("cList", cList);
-		return map;
-	}
-		
-	@GetMapping("/goods1/list_react")
-	public Map goods1ListData(int page)
+	@GetMapping("/camping/list_react")
+	public Map camping_list(int page)
 	{
 		System.out.println("page: " + page);
-		int rowSize=9;
+		int rowSize=12;
 		int start=(rowSize*page)-rowSize;
-		List<Goods1> list=dao.goods1ListData(start);
+		List<Camping> list=dao.campingListData(start);
 		Map map=new HashMap();
-		int totalpage=dao.goods1ListTotalPage();
+		int totalpage=dao.campingListTotalPage();
 		final int BLOCK=10;
 		int startPage=((page-1)/BLOCK*BLOCK)+1;
 		int endPage=((page-1)/BLOCK*BLOCK)+BLOCK;
@@ -54,11 +40,11 @@ public class GoodsRestController {
 		return map;
 	}
 	
-	@GetMapping("/goods1/detail_react")
-	public Map goods1DetailData(int gno)
+	@GetMapping("/camping/detail_react")
+	public Map campingDetailData(int mno)
 	{
 		Map map=new HashMap();
-		Goods1 vo=dao.findByGno(gno);
+		Camping vo=dao.findByMno(mno);
 		map.put("vo", vo);
 		return map;
 	}

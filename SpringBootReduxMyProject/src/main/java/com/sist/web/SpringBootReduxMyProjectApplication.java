@@ -5,11 +5,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan(basePackages = {"com.sist.web.controller", "com.sist.web.entity", "com.sist.web.dao", "com.sist.web.manager"})
-public class SpringBootReactMyProject1Application {
+@ComponentScan(basePackages = {"com.sist.web.controller", "com.sist.web.service"})
+public class SpringBootReduxMyProjectApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(SpringBootReactMyProject1Application.class, args);
+		SpringApplication.run(SpringBootReduxMyProjectApplication.class, args);
 	}
 
 }

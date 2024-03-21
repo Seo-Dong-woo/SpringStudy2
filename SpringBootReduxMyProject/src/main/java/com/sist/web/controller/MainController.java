@@ -17,7 +17,10 @@ public class MainController {
 	private GymService gService;
 	
 	@Autowired
-	private GoodsService gsService;
+	private GoodsMenService gsService;
+	
+	@Autowired
+	private GoodsNutService gnService;
 	
 	@GetMapping("/")
 	public List<Gym> gymMainData()
@@ -34,8 +37,14 @@ public class MainController {
 	}
 	
 	@GetMapping("/goods/main")
-	public List<Goods_Clothes> goodsMainList()
+	public List<Goods_Men_Clothes> goodsMainList()
 	{
 		return gsService.goodsMainList();
+	}
+	
+	@GetMapping("/goods_nut/main")
+	public List<Goods_Nut> goodsNutMainList()
+	{
+		return gnService.goodsNutMainList();
 	}
 }

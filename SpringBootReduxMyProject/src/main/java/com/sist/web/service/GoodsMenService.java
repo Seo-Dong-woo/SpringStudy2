@@ -11,14 +11,14 @@ import org.springframework.stereotype.Repository;
 import com.sist.web.entity.*;
 
 @Repository
-public interface GoodsService extends JpaRepository<Goods_Clothes, Integer> {
+public interface GoodsMenService extends JpaRepository<Goods_Men_Clothes, Integer> {
 	@Query(value = "SELECT * FROM jmmshop "
 			+ "ORDER BY jmno ASC LIMIT 0, 5", nativeQuery = true)
-	public List<Goods_Clothes> goodsMainList();
+	public List<Goods_Men_Clothes> goodsMainList();
 	
 	@Query(value = "SELECT * FROM jmmshop "
 			+ "ORDER BY jmno ASC LIMIT :start,12", nativeQuery = true)
-	public List<Goods_Clothes> goods1ListData(@Param("start") int start);
+	public List<Goods_Men_Clothes> goods1ListData(@Param("start") int start);
 	
-	
+	public Goods_Men_Clothes findByJmno(int jmno);
 }

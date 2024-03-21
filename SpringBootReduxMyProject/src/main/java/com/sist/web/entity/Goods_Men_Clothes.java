@@ -3,6 +3,9 @@ package com.sist.web.entity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /*
  *  JMNO int 
@@ -16,8 +19,10 @@ import lombok.Data;
 	HIT int
  */
 @Entity(name = "jmmshop")
-@Data
-public class Goods_Clothes {
+@Getter
+@Setter
+@NoArgsConstructor
+public class Goods_Men_Clothes {
 	@Id
 	private int jmno;
 	private int price, hit;

@@ -28,5 +28,5 @@ public class Goods_Nut {
 	@Id
 	private int gno;
 	private int price;
-	private String kname, poster, brand1, brand2, eatsize, eatuse, caution, type;
+	private String kname, ename, poster, brand1, brand2, eatsize, eatuse, caution, type;
 }

@@ -19,6 +19,9 @@ public class GoodsController {
 	@Autowired
 	private GoodsWomenService gwService;
 	
+	@Autowired
+	private GoodsNutService gnService;
+	
 	@GetMapping("/goods1/list_react")
 	public Map goods1_list(int page)
 	{
@@ -69,5 +72,28 @@ public class GoodsController {
 		gwService.save(gwc); // 조회수 증가한 값을 저장
 		gwc=gwService.findByJwno(jwno); // 조회수 증가한 값을 포함한 entity를 다시 불러옴
 		return gwc;
+	}
+	
+	@GetMapping("/goodsnut/list_react")
+	public Map goodsnut_list(int page)
+	{
+		int rowSize=12;
+		int start=(rowSize*page)-rowSize;
+		List<Goods_Nut> list=gnService.goodsNutListData(start);
+		int count=(int)gnService.count();
+		int totalpage=(int)(Math.ceil(count)/12.0);
+		
+		Map map=new HashMap();
+		map.put("goodsnut_list", list);
+		map.put("totalpage", totalpage);
+		
+		return map;
+	}
+	
+	@GetMapping("/goodsnut/detail_react")
+	public Goods_Nut goodsnut_detail(int gno)
+	{
+		Goods_Nut gn=gnService.findByGno(gno);
+		return gn;
 	}
 }

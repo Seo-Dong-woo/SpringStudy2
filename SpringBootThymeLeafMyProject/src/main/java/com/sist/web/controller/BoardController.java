@@ -49,6 +49,20 @@ public class BoardController {
 		return "redirect:/board/list";
 	}
 	
+	@GetMapping("/board/detail")
+	public String boardDetail(int no, Model model)
+	{
+		Board vo=dao.findByNo(no);
+		vo.setHit(vo.getHit()+1);
+		dao.save(vo); // insert, update를 동시에 처리
+		// 조회수 증가
+		vo=dao.findByNo(no);
+		model.addAttribute("vo", vo);
+		model.addAttribute("main_html", "board/detail");
+		return "board/detail";
+		// return "main";
+	}
+	
 	// 상세보기
 	// 수정
 	// 실제 수정 => redirect => detail

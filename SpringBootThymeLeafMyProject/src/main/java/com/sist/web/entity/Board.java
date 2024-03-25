@@ -1,5 +1,6 @@
 package com.sist.web.entity;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -32,13 +33,12 @@ public class Board {
 	private String name, subject, content;
 	@Column(insertable = true, updatable = false)
 	private String pwd;
-	@Column(insertable = true, updatable = false)
 	private int hit;
 	@Column(insertable = true, updatable = false)
 	private String regdate;
 	
 	@PrePersist
 	public void regdate() {
-		this.regdate=LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
+		this.regdate=LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss.SSS"));
 	}
 }
